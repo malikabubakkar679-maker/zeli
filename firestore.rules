@@ -1,0 +1,47 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // User profile documents
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+
+      // User cart items subcollection
+      match /cart/{cartId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      // User wishlist subcollection
+      match /wishlist/{wishId} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+
+    // Orders collection
+    match /orders/{orderId} {
+      // Allow any user (authenticated or guest) to place a new order with valid structure
+      allow create: if request.resource.data.orderId == orderId
+                    && request.resource.data.totalAmount > 0
+                    && request.resource.data.customerEmail is string
+                    && request.resource.data.customerName is string;
+
+      // Allow order tracking lookup and customer order history
+      allow read: if true;
+      allow update, delete: if false; // Orders are immutable once placed
+    }
+
+    // Connection check document
+    match /test/{docId} {
+      allow read: if true;
+    }
+  }
+}

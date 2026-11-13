@@ -1,0 +1,6 @@
+{
+  "name": "Try the Look — ZELI Runway",
+  "description": "Six looks, styled head to toe by ZELI. Explore the runway, isolate a look, and tap a pin to see the piece.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,85 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated user profile in ZELI store",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "email": { "type": "string", "description": "User email address" },
+        "displayName": { "type": "string", "description": "Full name" },
+        "photoURL": { "type": "string", "description": "Profile picture URL" },
+        "createdAt": { "type": "string", "description": "ISO timestamp of account creation" }
+      },
+      "required": ["uid", "email"]
+    },
+    "CartItem": {
+      "title": "CartItem",
+      "description": "An item saved in user styling bag or cart",
+      "type": "object",
+      "properties": {
+        "itemId": { "type": "string", "description": "Product ID" },
+        "name": { "type": "string", "description": "Product name" },
+        "price": { "type": "number", "description": "Price in USD" },
+        "size": { "type": "string", "description": "Selected size variant" },
+        "image": { "type": "string", "description": "Product thumbnail image URL" },
+        "quantity": { "type": "number", "description": "Quantity" },
+        "variantId": { "type": "number", "description": "Shopify or catalog variant ID" },
+        "updatedAt": { "type": "string", "description": "ISO timestamp" }
+      },
+      "required": ["itemId", "name", "price", "size", "quantity"]
+    },
+    "WishlistItem": {
+      "title": "WishlistItem",
+      "description": "A product saved to user wishlist",
+      "type": "object",
+      "properties": {
+        "itemId": { "type": "string", "description": "Product ID" },
+        "name": { "type": "string", "description": "Product name" },
+        "price": { "type": "number", "description": "Product price" },
+        "image": { "type": "string", "description": "Product image URL" },
+        "addedAt": { "type": "string", "description": "ISO timestamp" }
+      },
+      "required": ["itemId", "name", "price"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Completed checkout order record",
+      "type": "object",
+      "properties": {
+        "orderId": { "type": "string", "description": "Unique reference ID" },
+        "userId": { "type": "string", "description": "Firebase Auth UID or guest" },
+        "customerEmail": { "type": "string", "description": "Customer contact email" },
+        "customerName": { "type": "string", "description": "Recipient full name" },
+        "shippingAddress": { "type": "string", "description": "Full delivery street address" },
+        "city": { "type": "string", "description": "City" },
+        "postalCode": { "type": "string", "description": "Postal code" },
+        "country": { "type": "string", "description": "Country" },
+        "paymentMethod": { "type": "string", "description": "card, gpay, cod, klarna" },
+        "totalAmount": { "type": "number", "description": "Order total in USD" },
+        "status": { "type": "string", "description": "Order status (confirmed, processing, delivered)" },
+        "items": { "type": "string", "description": "JSON string of ordered items" },
+        "createdAt": { "type": "string", "description": "ISO timestamp" }
+      },
+      "required": ["orderId", "customerEmail", "customerName", "totalAmount", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile document indexed by UID"
+    },
+    "/users/{userId}/cart/{cartId}": {
+      "schema": "CartItem",
+      "description": "User shopping bag items subcollection"
+    },
+    "/users/{userId}/wishlist/{wishId}": {
+      "schema": "WishlistItem",
+      "description": "User favorite saved pieces"
+    },
+    "/orders/{orderId}": {
+      "schema": "Order",
+      "description": "Store customer order receipts"
+    }
+  }
+}
